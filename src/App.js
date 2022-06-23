@@ -6,6 +6,7 @@ import UnsplashImage from '../src/components/UnsplashImage';
 import axios from 'axios';
 import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 // Style 
@@ -34,29 +35,36 @@ function App() {
   const [images, setImages] = useState([])
 
   useEffect(() => {
-    // const apiRoot = "https://api.unsplash.com";
-    const apiRoot = "https://api.pexels.com/v1/";
+    fetchImages();
+  }, [])
+
+  const fetchImages = () => {
+    const apiRoot = "https://api.unsplash.com";
     const accessKey = process.env.REACT_APP_ACCESSKEY;
     
     axios
-      .get(`${apiRoot}/search?query=people`, {
-        headers: {
-          'Authorization': `${accessKey}`
-        }
-      })
+      .get(`${apiRoot}/photos/random?client_id=${accessKey}&count=10`)
       .then(res => setImages([...images, ...res.data]))
-  })
 
+  }
+  
   return (
     <div className="App">
       <Heading />
       <GlobalStyle />
-      <Loader />
-      <WrapperImage>
-        {images.map(image => (
-          <UnsplashImage url={image.src.large} key={image.id} />
-        ))}
-      </WrapperImage>
+      <InfiniteScroll
+        dataLength={images.length}
+        next={fetchImages}
+        hasMore={true}
+        loader={<Loader />}
+      >
+        <WrapperImage>
+          {images.map(image => (
+            <UnsplashImage url={image.urls.thumb} key={image.id} />
+          ))}
+        </WrapperImage>
+
+      </InfiniteScroll>
     </div>
   );
 }

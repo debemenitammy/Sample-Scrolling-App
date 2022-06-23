@@ -15,9 +15,9 @@ const H1 = styled.h1`
 const Heading = () => {
   return (
     <Header>
-      <H1>Unsplash</H1>
-      <p>The internet's source of freely usable images.</p>
-      <p>Powered by creators everywhere.</p>
+      <H1>Photo Album</H1>
+      <p>An infinite scroll of high resolution images.</p>
+      <p>Images shot by the world's best photographers.</p>
     </Header>
   )
 }
